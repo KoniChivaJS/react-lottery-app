@@ -35,7 +35,9 @@ export const Form: React.FC<Props> = ({ className, createUser }) => {
             type="text"
             placeholder="Enter user name"
             {...register("name", { required: "Name is required" })}
-            className="w-full p-2 border rounded-md"
+            className={`${
+              errors.name && "border-red-500"
+            } w-full p-2 border rounded-md focus:border-blue-500 focus:outline-none focus:ring-0`}
           />
           {errors.name && (
             <p className="text-red-500 text-sm mt-1">
@@ -57,7 +59,9 @@ export const Form: React.FC<Props> = ({ className, createUser }) => {
                 return selectedDate <= today || "Date cannot be in the future";
               },
             })}
-            className="w-full p-2 border rounded-md"
+            className={`${
+              errors.name && "border-red-500"
+            } w-full p-2 border rounded-md focus:border-blue-500 focus:outline-none focus:ring-0`}
           />
           {errors.dateOfBirth && (
             <p className="text-red-500 text-sm mt-1">
@@ -79,7 +83,9 @@ export const Form: React.FC<Props> = ({ className, createUser }) => {
                 message: "Invalid email address",
               },
             })}
-            className="w-full p-2 border rounded-md"
+            className={`${
+              errors.name && "border-red-500"
+            } w-full p-2 border rounded-md focus:border-blue-500 focus:outline-none focus:ring-0`}
           />
           {errors.email && (
             <p className="text-red-500 text-sm mt-1">
@@ -101,11 +107,13 @@ export const Form: React.FC<Props> = ({ className, createUser }) => {
                 message: "Invalid phone number",
               },
             })}
-            className="w-full p-2 border rounded-md"
+            className={`${
+              errors.name && "border-red-500"
+            } w-full p-2 border rounded-md focus:border-blue-500 focus:outline-none focus:ring-0`}
           />
-          {errors.phone && (
+          {errors.phoneNumber && (
             <p className="text-red-500 text-sm mt-1">
-              {String(errors.phone.message)}
+              {String(errors.phoneNumber.message)}
             </p>
           )}
         </div>

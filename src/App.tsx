@@ -1,6 +1,7 @@
 import React from "react";
 import { Form } from "./components/form";
 import { UsersList } from "./components/users-list";
+import { Winners } from "./components/winners";
 
 export interface User {
   id: number;
@@ -20,6 +21,7 @@ function App() {
 
   return (
     <div className="mx-auto max-w-[1280px] p-4 rounded-xl shadow-md">
+      <Winners users={users} />
       <Form createUser={createUser} />
       <UsersList users={users} />
     </div>
