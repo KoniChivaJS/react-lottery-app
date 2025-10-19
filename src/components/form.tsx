@@ -1,11 +1,13 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { User } from "../App";
 
 interface Props {
   className?: string;
+  createUser: (user: User) => void;
 }
 
-export const Form: React.FC<Props> = ({ className }) => {
+export const Form: React.FC<Props> = ({ className, createUser }) => {
   const {
     register,
     handleSubmit,
@@ -14,7 +16,10 @@ export const Form: React.FC<Props> = ({ className }) => {
   } = useForm();
 
   const onSubmit = (data: any) => {
-    console.log("Form data:", data);
+    createUser({
+      id: Date.now(),
+      ...data,
+    });
     reset();
   };
 
@@ -46,6 +51,11 @@ export const Form: React.FC<Props> = ({ className }) => {
             type="date"
             {...register("dateOfBirth", {
               required: "Date of birth is required",
+              validate: (value) => {
+                const today = new Date();
+                const selectedDate = new Date(value);
+                return selectedDate <= today || "Date cannot be in the future";
+              },
             })}
             className="w-full p-2 border rounded-md"
           />
@@ -84,7 +94,7 @@ export const Form: React.FC<Props> = ({ className }) => {
           <input
             type="tel"
             placeholder="+380XXXXXXXXX"
-            {...register("phone", {
+            {...register("phoneNumber", {
               required: "Phone number is required",
               pattern: {
                 value: /^\+?\d{10,14}$/,
