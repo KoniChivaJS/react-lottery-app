@@ -4,13 +4,15 @@ import {
   Merge,
   FieldErrorsImpl,
 } from "react-hook-form";
+import { IForm } from "./form";
+import { EnumType } from "typescript";
 
 interface InputFieldProps {
   label: string;
   type?: string;
   placeholder?: string;
-  register: UseFormRegister<any>;
-  name: string;
+  register: UseFormRegister<IForm>;
+  name: keyof IForm;
   error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
   validation?: any;
   className?: string;

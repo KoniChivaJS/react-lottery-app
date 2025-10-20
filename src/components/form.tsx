@@ -8,13 +8,22 @@ interface Props {
   createUser: (user: User) => void;
 }
 
+export interface IForm {
+  name: string;
+  dateOfBirth: string;
+  email: string;
+  phoneNumber: string;
+}
+
 export const Form: React.FC<Props> = ({ className, createUser }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm();
+  } = useForm<IForm>({
+    mode: "onChange"
+  });
 
   const onSubmit = (data: any) => {
     createUser({
