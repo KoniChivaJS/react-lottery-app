@@ -1,5 +1,7 @@
 import React from "react";
-import { User } from "../App";
+import { User } from "../../App";
+import { Button } from "../ui/button";
+import { WinnersItem } from "./winners-item";
 
 interface Props {
   className?: string;
@@ -13,7 +15,9 @@ export const Winners: React.FC<Props> = ({ className, users }) => {
     return Math.floor(Math.random() * max);
   }
 
-  const chooseWinner = (): void => {
+  const chooseWinner = (e?: React.MouseEvent): void => {
+    if (e) e.preventDefault();
+
     const randomIndex = getRandomInt(users.length);
     const randomUser = users[randomIndex];
 
@@ -35,34 +39,25 @@ export const Winners: React.FC<Props> = ({ className, users }) => {
       <div className="w-full flex flex-col">
         <div className="w-full border p-2 h-12 flex items-center flex-wrap gap-2 rounded-lg">
           {winners.map((user) => (
-            <div
+            <WinnersItem
               key={user.id}
-              className="bg-blue-600 text-white p-2 h-8 flex items-center rounded-md"
-            >
-              <p>{user.name}</p>
-              <button
-                type="button"
-                onClick={() => deleteWinner(user.id)}
-                className="ml-2"
-              >
-                X
-              </button>
-            </div>
+              user={user}
+              deleteWinner={deleteWinner}
+            />
           ))}
         </div>
       </div>
-      <button
-        type="button"
-        className="w-36  bg-blue-600 text-white p-2 h-12 rounded-md hover:bg-blue-700 transition"
+
+      <Button
+        text="New Winner"
+        className="h-12"
         onClick={chooseWinner}
         disabled={
           users.length === 0 ||
           winners.length >= 3 ||
           winners.length === users.length
         }
-      >
-        New Winner
-      </button>
+      />
     </div>
   );
 };

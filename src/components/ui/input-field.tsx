@@ -4,7 +4,7 @@ import {
   Merge,
   FieldErrorsImpl,
 } from "react-hook-form";
-import { IForm } from "./form";
+import { IForm } from "../shared/form";
 import { EnumType } from "typescript";
 
 interface InputFieldProps {
