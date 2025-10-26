@@ -2,6 +2,7 @@ import React from "react";
 import { Form } from "./components/shared/form";
 import { UsersList } from "./components/shared/users-list";
 import { Winners } from "./components/shared/winners";
+import toast from "react-hot-toast";
 
 export interface User {
   id: number;
@@ -15,6 +16,10 @@ function App() {
   const [users, setUsers] = React.useState<User[]>([]);
 
   const createUser = (user: User) => {
+    if (users.some((u) => u.email === user.email)) {
+      toast.error("User with this email already exists");
+      return;
+    }
     setUsers([...users, user]);
     saveUsersToLocalStorage([...users, user]);
   };

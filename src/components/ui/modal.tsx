@@ -1,5 +1,4 @@
 import React from "react";
-import { Button } from "./button";
 import { CircleX } from "lucide-react";
 
 interface ModalProps {
@@ -13,6 +12,22 @@ export const Modal: React.FC<ModalProps> = ({
   modalContent,
   onClose,
 }) => {
+  React.useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    if (isModalOpen) {
+      window.addEventListener("keydown", handleEsc);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [isModalOpen, onClose]);
+
   if (!isModalOpen) return null;
 
   return (
@@ -24,7 +39,6 @@ export const Modal: React.FC<ModalProps> = ({
         >
           <CircleX className="text-black" />
         </button>
-
         <div>{modalContent}</div>
       </div>
     </div>
