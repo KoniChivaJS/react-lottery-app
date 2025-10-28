@@ -1,11 +1,14 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { User } from "../App";
-import InputField from "./input-field";
+import { User } from "../../App";
+import { Button } from "../ui/button";
+import InputField from "../ui/input-field";
 
 interface Props {
   className?: string;
-  createUser: (user: User) => void;
+  createUser?: (user: User) => void;
+  user?: User;
+  updateUser?: (user: User) => void;
 }
 
 export interface IForm {
@@ -15,28 +18,56 @@ export interface IForm {
   phoneNumber: string;
 }
 
-export const Form: React.FC<Props> = ({ className, createUser }) => {
+export const Form: React.FC<Props> = ({
+  className,
+  createUser,
+  updateUser,
+  user,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm<IForm>({
-    mode: "onChange"
+    mode: "onChange",
   });
 
   const onSubmit = (data: any) => {
-    createUser({
-      id: Date.now(),
-      ...data,
-    });
+    if (createUser) {
+      createUser({
+        id: Date.now(),
+        ...data,
+      });
+    }
+
+    if (updateUser) {
+      updateUser({
+        id: Date.now(),
+        ...data,
+      });
+    }
+
     reset();
   };
 
+  React.useEffect(() => {
+    if (user) {
+      reset(user);
+    }
+  }, [user]);
+
   return (
     <div className={className}>
-      <h2 className="text-xl font-bold">REGISTER FORM</h2>
-      <h3 className="text-lg text-gray-400">Please fill in all the fields</h3>
+      {createUser && (
+        <>
+          {" "}
+          <h2 className="text-xl font-bold">REGISTER FORM</h2>
+          <h3 className="text-lg text-gray-400">
+            Please fill in all the fields
+          </h3>
+        </>
+      )}
       <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
         <InputField
           label="Name"
@@ -99,12 +130,7 @@ export const Form: React.FC<Props> = ({ className, createUser }) => {
           }}
         />
 
-        <button
-          type="submit"
-          className="w-36 mt-10 bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition "
-        >
-          Save
-        </button>
+        <Button text="Save" className="my-8" />
       </form>
     </div>
   );
