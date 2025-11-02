@@ -11,7 +11,7 @@ interface Props {
   deleteUser: (id: number) => void;
 }
 
-type SortField = "name" | "dateOfBirth" | null;
+type SortField = "name" | null;
 type SortDirection = "asc" | "desc";
 
 export const UsersList: React.FC<Props> = ({
@@ -48,9 +48,6 @@ export const UsersList: React.FC<Props> = ({
       if (sortField === "name") {
         aVal = a.name.toLowerCase();
         bVal = b.name.toLowerCase();
-      } else if (sortField === "dateOfBirth") {
-        aVal = new Date(a.dateOfBirth).getTime();
-        bVal = new Date(b.dateOfBirth).getTime();
       } else {
         return 0;
       }
@@ -75,7 +72,7 @@ export const UsersList: React.FC<Props> = ({
       <SearchBar onFilter={setFilterQuery} />
 
       <div className="grid grid-cols-6 font-semibold text-gray-600 border-b pb-2 mb-2">
-        <div>#</div>
+        <div>id</div>
 
         <div
           className="flex items-center gap-1 cursor-pointer select-none"
@@ -84,15 +81,12 @@ export const UsersList: React.FC<Props> = ({
           Name {renderSortIcon("name")}
         </div>
 
-        <div
-          className="flex items-center gap-1 cursor-pointer select-none"
-          onClick={() => toggleSort("dateOfBirth")}
-        >
-          Date of Birth {renderSortIcon("dateOfBirth")}
+        <div className="flex items-center gap-1 cursor-pointer select-none">
+          Role
         </div>
 
         <div>Email</div>
-        <div>Phone number</div>
+        <div>Avatar</div>
         <div>Actions</div>
       </div>
 

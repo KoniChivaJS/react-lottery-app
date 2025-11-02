@@ -1,9 +1,10 @@
 import React from "react";
 import { User } from "../../App";
-import { Pencil, Trash } from "lucide-react";
-import { Form } from "./form";
+import { BetweenHorizontalStart, Pencil, Trash } from "lucide-react";
+import { Form } from "./forms/user-form";
 import { Modal } from "../ui/modal";
 import { Button } from "../ui/button";
+import { NavLink } from "react-router";
 
 interface Props {
   className?: string;
@@ -29,12 +30,14 @@ export const UserItem: React.FC<Props> = ({
 
   return (
     <div className={`flex flex-col ${className}`}>
-      <div className="grid grid-cols-6 border-b py-2">
-        <div>{index + 1}</div>
+      <div className="grid grid-cols-6 border-b py-2 gap-5">
+        <div>{user.id}</div>
         <div>{user.name}</div>
-        <div>{user.dateOfBirth}</div>
+        <div>{user.role}</div>
         <div>{user.email}</div>
-        <div>{user.phoneNumber}</div>
+        <div className="flex justify-center">
+          <img src={user.avatar} alt="avatar" className=" w-[50%]" />
+        </div>
         <div className="flex items-center gap-4">
           <Pencil
             onClick={() => setIsOpenEdit(!isOpenEdit)}
@@ -44,6 +47,9 @@ export const UserItem: React.FC<Props> = ({
             className="cursor-pointer"
             onClick={() => setIsOpenDelete(true)}
           />
+          <NavLink to={`user/${user.id}`}>
+            <BetweenHorizontalStart />
+          </NavLink>
         </div>
       </div>
 
