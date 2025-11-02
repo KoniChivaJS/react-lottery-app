@@ -1,8 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { User } from "../../App";
-import { Button } from "../ui/button";
-import InputField from "../ui/input-field";
+import { User } from "../../../App";
+import { Button } from "../../ui/button";
+import InputField from "../../ui/input-field";
 
 interface Props {
   className?: string;
@@ -11,11 +11,11 @@ interface Props {
   updateUser?: (user: User) => void;
 }
 
-export interface IForm {
+export interface IUserForm {
   name: string;
-  dateOfBirth: string;
   email: string;
-  phoneNumber: string;
+  password: string;
+  avatar: string;
 }
 
 export const Form: React.FC<Props> = ({
@@ -29,7 +29,7 @@ export const Form: React.FC<Props> = ({
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<IForm>({
+  } = useForm<IUserForm>({
     mode: "onChange",
   });
 
@@ -54,6 +54,10 @@ export const Form: React.FC<Props> = ({
   React.useEffect(() => {
     if (user) {
       reset(user);
+    } else {
+      reset({
+        avatar: "https://i.imgur.com/LDOO4Qs.jpg",
+      });
     }
   }, [user]);
 
@@ -79,23 +83,6 @@ export const Form: React.FC<Props> = ({
           validation={{ required: "Name is required" }}
         />
 
-        {/* Date of Birth */}
-        <InputField
-          label="Date of Birth"
-          type="date"
-          register={register}
-          name="dateOfBirth"
-          error={errors.dateOfBirth}
-          validation={{
-            required: "Date of birth is required",
-            validate: (value: string) => {
-              const today = new Date();
-              const selectedDate = new Date(value);
-              return selectedDate <= today || "Date cannot be in the future";
-            },
-          }}
-        />
-
         {/* Email */}
         <InputField
           label="Email"
@@ -113,19 +100,30 @@ export const Form: React.FC<Props> = ({
           }}
         />
 
-        {/* Phone Number */}
+        {/* Avatar */}
         <InputField
-          label="Phone Number"
-          type="tel"
-          placeholder="+380XXXXXXXXX"
+          label="Avatar URL"
+          type="text"
+          placeholder="Place URL of your avatar"
           register={register}
-          name="phoneNumber"
-          error={errors.phoneNumber}
+          name="avatar"
+          error={errors.avatar}
+          validation={{ required: "Avatar is required" }}
+        />
+
+        {/* password */}
+        <InputField
+          label="Password"
+          type="password"
+          placeholder="Enter password"
+          register={register}
+          name="password"
+          error={errors.password}
           validation={{
-            required: "Phone number is required",
-            pattern: {
-              value: /^\+?\d{10,14}$/,
-              message: "Invalid phone number",
+            required: "Password is required",
+            minLength: {
+              value: 6,
+              message: "Password must be at least 6 characters",
             },
           }}
         />

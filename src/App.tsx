@@ -1,64 +1,96 @@
 import React from "react";
-import { Form } from "./components/shared/form";
-import { UsersList } from "./components/shared/users-list";
-import { Winners } from "./components/shared/winners";
 import toast from "react-hot-toast";
+import { AppNavigation } from "./components/shared/app-navigation";
+import { Route, Routes } from "react-router";
+import {
+  About,
+  Home,
+  Login,
+  Lottery,
+  UserPage,
+} from "./components/shared/pages";
+import {
+  createUserService,
+  deleteUserService,
+  getUsers,
+  updateUserService,
+} from "./services/user-service";
 
 export interface User {
   id: number;
   name: string;
-  dateOfBirth: string;
+  role: string;
   email: string;
-  phoneNumber: string;
+  avatar: string;
+  updatedAt: string;
+  creationAt: string;
+  password: string;
 }
 
 function App() {
   const [users, setUsers] = React.useState<User[]>([]);
 
-  const createUser = (user: User) => {
-    if (users.some((u) => u.email === user.email)) {
-      toast.error("User with this email already exists");
-      return;
+  const fetchUsers = async () => {
+    try {
+      const response = await getUsers();
+      setUsers(response);
+    } catch (error: unknown) {
+      toast.error("Failed to fetch users");
     }
-    setUsers([...users, user]);
-    saveUsersToLocalStorage([...users, user]);
   };
 
-  const updateUser = (user: User) => {
-    const updatedUsers = users.map((prev) =>
-      prev.id === user.id ? user : prev
-    );
-    setUsers(updatedUsers);
-    saveUsersToLocalStorage(updatedUsers);
+  const createUser = async (user: User) => {
+    try {
+      await createUserService(user);
+      fetchUsers();
+    } catch (error: unknown) {
+      toast.error("Failed to create user");
+    }
   };
 
-  const deleteUser = (id: number) => {
-    const updatedUsers = users.filter((user) => user.id !== id);
-    setUsers(updatedUsers);
-    saveUsersToLocalStorage(updatedUsers);
+  const updateUser = async (user: User) => {
+    try {
+      await updateUserService(user.id, user);
+      fetchUsers();
+    } catch (error: unknown) {
+      toast.error("Failed to update user");
+    }
   };
 
-  const saveUsersToLocalStorage = (users: User[]) => {
-    console.log("save ", users);
-    localStorage.setItem("users", JSON.stringify(users));
+  const deleteUser = async (id: number) => {
+    try {
+      await deleteUserService(id);
+      fetchUsers();
+    } catch (error: unknown) {
+      toast.error("Failed to delete user");
+    }
   };
 
   React.useEffect(() => {
-    const storedUsers = localStorage.getItem("users");
-    if (storedUsers) {
-      setUsers(JSON.parse(storedUsers));
-    }
+    fetchUsers();
   }, []);
 
   return (
     <div className="mx-auto max-w-[1280px] p-4 rounded-xl shadow-md">
-      <Winners users={users} />
-      <Form createUser={createUser} />
-      <UsersList
-        users={users}
-        updateUser={updateUser}
-        deleteUser={deleteUser}
-      />
+      <AppNavigation />
+      <Routes>
+        <Route
+          index
+          element={
+            <Home
+              createUser={createUser}
+              users={users}
+              updateUser={updateUser}
+              deleteUser={deleteUser}
+            />
+          }
+        />
+
+        <Route path="about" element={<About />} />
+        <Route path="lottery" element={<Lottery users={users} />} />
+        <Route path="login" element={<Login />} />
+        <Route path="user/:id" element={<UserPage />} />
+      </Routes>
     </div>
   );
 }
