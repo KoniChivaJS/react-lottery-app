@@ -5,13 +5,11 @@ import { NavLink } from "react-router";
 interface Props {
   className?: string;
   navigationItem: NavItem;
-  handleLogout: () => void;
 }
 
 export const NavigationItem: React.FC<Props> = ({
   className,
   navigationItem,
-  handleLogout,
 }) => {
   return (
     <nav>
@@ -20,8 +18,9 @@ export const NavigationItem: React.FC<Props> = ({
         className=""
         onClick={navigationItem.onClick}
       >
-        <h3 className="text-xl cursor-pointer hover:underline">
+        <h3 className="text-xl cursor-pointer hover:underline flex gap-2 items-center">
           {navigationItem.label}
+          {navigationItem?.icon}
         </h3>
       </NavLink>
     </nav>

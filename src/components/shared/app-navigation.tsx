@@ -2,6 +2,7 @@ import React from "react";
 import { NavigationItem } from "./navigation-item";
 import { useAuthStore } from "../../store/auth-store";
 import { useNavigate } from "react-router";
+import { LogOut } from "lucide-react";
 
 interface Props {
   className?: string;
@@ -11,6 +12,7 @@ export interface NavItem {
   label: string;
   link: string;
   onClick?: () => void;
+  icon?: React.ReactNode
 }
 
 export const AppNavigation: React.FC<Props> = ({ className }) => {
@@ -40,6 +42,7 @@ export const AppNavigation: React.FC<Props> = ({ className }) => {
       label: "Logout",
       link: "/login",
       onClick: handleLogout,
+      icon: <LogOut size={16}/>
     });
   } else {
     navigateItems.push({
@@ -56,7 +59,6 @@ export const AppNavigation: React.FC<Props> = ({ className }) => {
         <NavigationItem
           key={index}
           navigationItem={item}
-          handleLogout={handleLogout}
         />
       ))}
     </div>

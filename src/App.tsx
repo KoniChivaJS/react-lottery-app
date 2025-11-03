@@ -43,6 +43,7 @@ function App() {
     try {
       await createUserService(user);
       fetchUsers();
+      toast.success("User created successfully");
     } catch (error: unknown) {
       toast.error("Failed to create user");
     }
@@ -52,6 +53,7 @@ function App() {
     try {
       await updateUserService(user.id, user);
       fetchUsers();
+      toast.success("User updated successfully");
     } catch (error: unknown) {
       toast.error("Failed to update user");
     }
@@ -61,6 +63,7 @@ function App() {
     try {
       await deleteUserService(id);
       fetchUsers();
+      toast.success("User deleted successfully");
     } catch (error: unknown) {
       toast.error("Failed to delete user");
     }
